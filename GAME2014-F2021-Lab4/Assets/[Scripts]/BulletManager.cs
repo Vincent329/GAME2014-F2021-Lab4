@@ -31,7 +31,7 @@ public class BulletManager : MonoBehaviour
 
     private void AddBullet()
     {
-        var temp_bullet = Instantiate(bulletPrefab);
+        var temp_bullet = Instantiate(bulletPrefab); // need to decouple this somehow
         temp_bullet.SetActive(false);
         temp_bullet.transform.parent = transform;
         bulletPool.Enqueue(temp_bullet);
@@ -47,7 +47,7 @@ public class BulletManager : MonoBehaviour
     {
         if (bulletPool.Count < 1)
         {
-            AddBullet();
+            AddBullet(); // this only adds enemy bullets, because it looks at a very specific bullet prefab
             bulletNumber++;
         }
 
