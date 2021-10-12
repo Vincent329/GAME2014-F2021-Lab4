@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BulletBehaviour : MonoBehaviour
 {
+    public BulletType type;
+
     [Header("Bullet Movement")]
     [Range(0.0f, 0.5f)]
     public float speed;
@@ -56,7 +58,7 @@ public class BulletBehaviour : MonoBehaviour
     {
         if (transform.position.y < bulletBounds.max || transform.position.y > bulletBounds.min)
         {
-            bulletManager.ReturnBullet(this.gameObject);
+            bulletManager.ReturnBullet(this.gameObject, type);
         }
         // checked the top bounds
     }
