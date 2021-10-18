@@ -25,11 +25,8 @@ public class BulletBehaviour : MonoBehaviour
     private void Move()
     {
         // need to discern direction depending whether or not the bullet belongs to a player or enemy
-        // depending on our movement
-       
-       transform.position += bulletVelocity;
-          
-       
+        // depending on our movement      
+       transform.position += bulletVelocity;        
     }
 
     /// <summary>

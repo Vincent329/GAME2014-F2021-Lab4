@@ -33,21 +33,25 @@ public class BulletManager
 
     }
 
+    // GOOD IDEA TO USE A LIST RATHER THAN AN ARRAY
+    public List<Queue<GameObject>> bulletPools;
+
     // step 4, need another way to instantiate our bullet
     // make it a singleton? how do I reference the factory? Can't use a get component because it's Monobehaviour type
-    public Queue<GameObject> enemyBulletPool;
-    public Queue<GameObject> playerBulletPool;
-
-    public int enemyBulletNumber;
-    public int playerBulletNumber;
-
-  
 
     // we need a replacement for start
     private void Initialize()
     {
-        enemyBulletPool = new Queue<GameObject>(); // creates an empty enemy bullet Queue
-        playerBulletPool = new Queue<GameObject>(); // CREATE an empty player bullet Queue -> NEED THIS
+        // deprecated
+        //enemyBulletPool = new Queue<GameObject>(); // creates an empty enemy bullet Queue
+        //playerBulletPool = new Queue<GameObject>(); // CREATE an empty player bullet Queue -> NEED THIS
+        bulletPools = new List<Queue<GameObject>>();
+
+        // instantiate  new queue collections based on number of bullet types
+        for (int count = 0; count < (int)BulletType.NUM_OF_BULLET_TYPES; count++)
+        {
+            bulletPools.Add(new Queue<GameObject>()); // remember that it's a LIST, not an ARRAY
+        }
 
         // find an object of type bullet factory in the hierarchy
         // now what are we gonna do
@@ -58,17 +62,9 @@ public class BulletManager
     {
         // call the singleton of the bullet factory
         var temp_bullet = BulletFactory.Instance().createBullet(type);
-        switch (type)
-        {
-            case (BulletType.ENEMY):
-                enemyBulletPool.Enqueue(temp_bullet);
-                enemyBulletNumber++;
-            break;
-            case (BulletType.PLAYER):
-                playerBulletPool.Enqueue(temp_bullet);
-                playerBulletNumber++;
-                break;
-        } 
+        bulletPools[(int)type].Enqueue(temp_bullet);
+        // CHANGE: depending on the bullet type, we create the queues
+
     }
 
     /// <summary>
@@ -80,27 +76,16 @@ public class BulletManager
     public GameObject GetBullet(Vector2 spawnPosition, BulletType type = BulletType.ENEMY)
     {
         GameObject temp_bullet = null;
-        switch (type)
+
+        if (bulletPools[(int)type].Count < 1)
         {
-            case (BulletType.ENEMY):
-                if (enemyBulletPool.Count < 1)
-                {
-                    AddBullet(); // this only adds enemy bullets, because it looks at a very specific bullet prefab
-                }
-                temp_bullet = enemyBulletPool.Dequeue();
-                temp_bullet.transform.position = spawnPosition;
-                temp_bullet.SetActive(true);
-                break;
-            case (BulletType.PLAYER):
-                if (playerBulletPool.Count < 1)
-                {
-                    AddBullet(BulletType.PLAYER); // this only adds PLAYER bullets, because it looks at a very specific bullet prefab
-                }
-                temp_bullet = playerBulletPool.Dequeue();
-                temp_bullet.transform.position = spawnPosition;
-                temp_bullet.SetActive(true);
-                break;
+            AddBullet(type);
         }
+        // get the bullet from the queue
+        temp_bullet = bulletPools[(int)type].Dequeue();
+
+        temp_bullet.transform.position = spawnPosition;
+        temp_bullet.SetActive(true);
         
         return temp_bullet;
     }
@@ -113,15 +98,8 @@ public class BulletManager
     {
         returnedBullet.SetActive(false);
 
-        switch (type)
-        {
-            case (BulletType.ENEMY):
-                enemyBulletPool.Enqueue(returnedBullet);
-                break;
-            case (BulletType.PLAYER):
-                playerBulletPool.Enqueue(returnedBullet);
-                break;
-        }
+        // depending on the type of the bullet, return it back to its respective bullet pool
+        bulletPools[(int)type].Enqueue(returnedBullet);
         
     }
 }
