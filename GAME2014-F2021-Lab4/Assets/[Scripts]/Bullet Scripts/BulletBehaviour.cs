@@ -4,37 +4,24 @@ using UnityEngine;
 
 public class BulletBehaviour : MonoBehaviour
 {
-    public BulletType type;
+    public BulletType type; // theoretically this can disappear. Can save some code by not caring,
+                            // because we're making a new bullet from bulletbehaviour, bulletbehaviour will be abstract
+                            // have 2 types of bullet behaviours, player and enemy.
 
+
+    
     [Header("Bullet Movement")]
-    [Range(0.0f, 0.5f)]
-    public float speed;
-    public Bounds bulletBounds;
-    public BulletDirection direction;
+   
+    public Vector3 bulletVelocity; // keep this
+    public Bounds bulletBounds; // player may potentially fire in different directions
 
-    private BulletManager bulletManager;
-    private Vector3 bulletVelocity;
+    //private BulletManager bulletManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        bulletManager = GameObject.FindObjectOfType<BulletManager>();
+        //bulletManager = GameObject.FindObjectOfType<BulletManager>();
 
-        switch (direction)
-        {
-            case BulletDirection.DOWN:
-                bulletVelocity = new Vector3(0.0f, -speed, 0.0f);
-                break;
-            case BulletDirection.UP:
-                bulletVelocity = new Vector3(0.0f, speed, 0.0f);
-                break;
-            case BulletDirection.RIGHT:
-                bulletVelocity = new Vector3(speed, 0.0f, 0.0F);
-                break;
-            case BulletDirection.LEFT:
-                bulletVelocity = new Vector3(-speed, 0.0f, 0.0F);
-                break;
-        }
     }
 
     // Update is called once per frame
@@ -54,11 +41,16 @@ public class BulletBehaviour : MonoBehaviour
        
     }
 
+    /// <summary>
+    ///  this can be changed
+    ///  for this instance, chances are that we are not gonna check the bullet's boundaries the same way between player and enmey 
+    /// </summary>
     private void CheckBounds()
     {
         if (transform.position.y < bulletBounds.max || transform.position.y > bulletBounds.min)
         {
-            bulletManager.ReturnBullet(this.gameObject, type);
+            // returning the bullet via instance
+            BulletManager.Instance().ReturnBullet(this.gameObject, type);
         }
         // checked the top bounds
     }

@@ -16,7 +16,7 @@ public class PlayerBehaviour : MonoBehaviour
     private Transform bulletSpawn;
 
     private Rigidbody2D rigidbody;
-    private BulletManager bulletManager;
+    //private BulletManager bulletManager;
 
     public int frameDelay;
 
@@ -24,7 +24,7 @@ public class PlayerBehaviour : MonoBehaviour
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        bulletManager = GameObject.FindObjectOfType<BulletManager>();
+        //bulletManager = GameObject.FindObjectOfType<BulletManager>();
 
     }
 
@@ -64,7 +64,8 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (Input.GetAxisRaw("Jump") > 0 && Time.frameCount % frameDelay == 0)
         {
-            bulletManager.GetBullet(bulletSpawn.position, BulletType.PLAYER);
+            // calling as a singleton now
+            BulletManager.Instance().GetBullet(bulletSpawn.position, BulletType.PLAYER);
         }
     }
 

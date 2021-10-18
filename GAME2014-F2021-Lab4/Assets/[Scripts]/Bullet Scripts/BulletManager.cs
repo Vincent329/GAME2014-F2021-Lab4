@@ -3,23 +3,55 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+/// <summary>
+/// Bullet Factory now a singleton
+/// </summary>
 [System.Serializable]
-public class BulletManager : MonoBehaviour
+public class BulletManager
 {
+    // Step 1: Create a private static instance of the bullet manager
+    private static BulletManager instance = null;
+
+    // Step 2: private default constructor
+    private BulletManager()
+    {
+        // setup the bullet manager
+        Initialize();
+    }
+
+    // Step 3: Create a public static creational method for the class, ;like a portal
+    public static BulletManager Instance()
+    {
+        if (instance == null)
+        {
+            instance = new BulletManager();
+        }
+        return instance;
+
+        // now create the factory as BulletManager::Instance().createfactory();
+
+    }
+
+    // step 4, need another way to instantiate our bullet
+    // make it a singleton? how do I reference the factory? Can't use a get component because it's Monobehaviour type
     public Queue<GameObject> enemyBulletPool;
     public Queue<GameObject> playerBulletPool;
+
     public int enemyBulletNumber;
     public int playerBulletNumber;
-    //public GameObject bulletPrefab;
 
+    // private reference to the bullet factory
     private BulletFactory factory;
 
-    // Start is called before the first frame update
-    void Start()
+    // we need a replacement for start
+    private void Initialize()
     {
         enemyBulletPool = new Queue<GameObject>(); // creates an empty enemy bullet Queue
-        playerBulletPool = new Queue<GameObject>(); // creates an empty player bullet Queue
-        factory = GetComponent<BulletFactory>();
+        playerBulletPool = new Queue<GameObject>(); // CREATE an empty player bullet Queue -> NEED THIS
+
+        // find an object of type bullet factory in the hierarchy
+        factory = GameObject.FindObjectOfType<BulletFactory>(); // get he component of the bullet factory
     }
 
     private void AddBullet(BulletType type = BulletType.ENEMY)
@@ -61,7 +93,7 @@ public class BulletManager : MonoBehaviour
             case (BulletType.PLAYER):
                 if (playerBulletPool.Count < 1)
                 {
-                    AddBullet(BulletType.PLAYER); // this only adds enemy bullets, because it looks at a very specific bullet prefab
+                    AddBullet(BulletType.PLAYER); // this only adds PLAYER bullets, because it looks at a very specific bullet prefab
                 }
                 temp_bullet = playerBulletPool.Dequeue();
                 temp_bullet.transform.position = spawnPosition;
