@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// Going to make the bullet factory a singleton now
+/// Going to make the bullet factory a singleton now, abstract?
 /// </summary>
 [System.Serializable]
 public class BulletFactory
@@ -51,6 +51,8 @@ public class BulletFactory
 
     public GameObject createBullet(BulletType type = BulletType.ENEMY)
     {
+        // now since all bullets are of type bullet, they all inherit from the interface
+        
         GameObject temp_bullet = null;
         switch (type)
         {

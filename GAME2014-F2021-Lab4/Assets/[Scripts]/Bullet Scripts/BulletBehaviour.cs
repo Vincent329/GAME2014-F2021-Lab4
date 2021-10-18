@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBehaviour
+public abstract class BulletBehaviour : MonoBehaviour
 {
     public BulletType type; // theoretically this can disappear. Can save some code by not caring,
                             // because we're making a new bullet from bulletbehaviour, bulletbehaviour will be abstract
                             // have 2 types of bullet behaviours, player and enemy.
 
 
-    
+    /// <summary>
+    /// we made these a public type,
+    /// </summary>
     [Header("Bullet Movement")]
-   
     public Vector3 bulletVelocity; // keep this
     public Bounds bulletBounds; // player may potentially fire in different directions
 
@@ -33,7 +34,7 @@ public class BulletBehaviour : MonoBehaviour
     ///  this can be changed
     ///  for this instance, chances are that we are not gonna check the bullet's boundaries the same way between player and enmey 
     /// </summary>
-    private void CheckBounds()
+    protected virtual void CheckBounds()
     {
         if (transform.position.y < bulletBounds.max || transform.position.y > bulletBounds.min)
         {
