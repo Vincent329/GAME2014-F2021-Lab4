@@ -41,8 +41,7 @@ public class BulletManager
     public int enemyBulletNumber;
     public int playerBulletNumber;
 
-    // private reference to the bullet factory
-    private BulletFactory factory;
+  
 
     // we need a replacement for start
     private void Initialize()
@@ -51,12 +50,14 @@ public class BulletManager
         playerBulletPool = new Queue<GameObject>(); // CREATE an empty player bullet Queue -> NEED THIS
 
         // find an object of type bullet factory in the hierarchy
-        factory = GameObject.FindObjectOfType<BulletFactory>(); // get he component of the bullet factory
+        // now what are we gonna do
     }
 
+    // change things to account for the bullet factory instance
     private void AddBullet(BulletType type = BulletType.ENEMY)
     {
-        var temp_bullet = factory.createBullet(type);
+        // call the singleton of the bullet factory
+        var temp_bullet = BulletFactory.Instance().createBullet(type);
         switch (type)
         {
             case (BulletType.ENEMY):

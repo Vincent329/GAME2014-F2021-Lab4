@@ -15,15 +15,6 @@ public class BulletBehaviour : MonoBehaviour
     public Vector3 bulletVelocity; // keep this
     public Bounds bulletBounds; // player may potentially fire in different directions
 
-    //private BulletManager bulletManager;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        //bulletManager = GameObject.FindObjectOfType<BulletManager>();
-
-    }
-
     // Update is called once per frame
     void FixedUpdate()
     {

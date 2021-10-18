@@ -16,7 +16,6 @@ public class PlayerBehaviour : MonoBehaviour
     private Transform bulletSpawn;
 
     private Rigidbody2D rigidbody;
-    //private BulletManager bulletManager;
 
     public int frameDelay;
 
@@ -24,7 +23,6 @@ public class PlayerBehaviour : MonoBehaviour
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        //bulletManager = GameObject.FindObjectOfType<BulletManager>();
 
     }
 
